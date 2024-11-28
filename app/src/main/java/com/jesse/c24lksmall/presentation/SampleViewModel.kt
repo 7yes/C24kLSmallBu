@@ -23,11 +23,11 @@ class SampleViewModel @Inject constructor(private val getDataUC: GetDataUC) : Vi
     fun getData() {
         viewModelScope.launch {
             _uiState.value = UIState.Loading
-            try {
-                val result = getDataUC()
-                _uiState.value = UIState.Success(result)
-            } catch (e: Exception) {
-                _uiState.value = UIState.Error(e.message.toString())
+            val result = getDataUC()
+            if (result.data != null) {
+                _uiState.value = UIState.Success(result.data)
+            } else {
+                _uiState.value = UIState.Error(result.message.toString())
             }
         }
     }
